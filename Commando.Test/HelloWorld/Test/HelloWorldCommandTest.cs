@@ -13,9 +13,9 @@ namespace Commando.Test.HelloWorld.Test
 
         [SetUp]
         public void SetUp() {
-            var builder = new ContainerBuilder();
             BasicConfigurator.Configure();
-
+            
+            var builder = new ContainerBuilder();
             builder.RegisterDispatcher();
             container = builder.Build();
         }

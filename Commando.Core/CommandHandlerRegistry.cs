@@ -9,7 +9,7 @@ namespace Commando.Core
     public class CommandHandlerRegistry
     {
         public static IList<Type> FindMessageHandlersFrom(Assembly assembly) {
-            return AttributeUtil.FindByAttribyte<CommandHandlerAttribute>(assembly);
+            return AttributeUtil.FindByAttribute<CommandHandlerAttribute>(assembly);
         }
     }
 }

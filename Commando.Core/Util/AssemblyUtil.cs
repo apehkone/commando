@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using log4net;
-using log4net.Config;
 
 namespace Commando.Core.Util
 {
     public static class AssemblyUtil
     {
-        static ILog log = LogManager.GetLogger(typeof (AssemblyUtil));
+        static readonly ILog log = LogManager.GetLogger(typeof (AssemblyUtil));
 
         public static IDictionary<string, Assembly> LoadAllKnownAssemblies() {
             IDictionary<string, Assembly> assemblies = new Dictionary<string, Assembly>();
