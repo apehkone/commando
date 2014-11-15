@@ -15,13 +15,14 @@ namespace Commando.Core
         }
 
         public TResult Dispatch<TMessage, TResult>(TMessage message) {
-            var handler = container.Resolve<ICommandHandler<TMessage, TResult>>();
-            if (handler == null) {
-                log.ErrorFormat("Cannot resolve command handler for command {0} result {1}", typeof (TMessage), typeof (TResult));
-                throw new CommandHandlerNotFoundException(typeof (TMessage));
+            if (container.IsRegistered<ICommandHandler<TMessage, TResult>>()) {
+                var handler = container.Resolve<ICommandHandler<TMessage, TResult>>();
+                log.DebugFormat("Executing command handler for type {0} {1}", typeof (TMessage), typeof (TResult));
+                return handler.Execute(message);
             }
-            log.DebugFormat("Executing command handler for type {0} {1}", typeof (TMessage), typeof (TResult));
-            return handler.Execute(message);
+
+            log.ErrorFormat("Cannot resolve command handler for command {0} {1}", typeof (TMessage), typeof (TResult));
+            throw new CommandHandlerNotFoundException(typeof (TMessage));
         }
 
         public Task<TResult> DispatchAsync<TMessage, TResult>(TMessage message) {

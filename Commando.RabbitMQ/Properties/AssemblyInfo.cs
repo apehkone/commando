@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Commando.Test")]
+[assembly: AssemblyTitle("Commando.RabbitMQ")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Commando.Test")]
+[assembly: AssemblyProduct("Commando.RabbitMQ")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("Commando")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d563e9ef-bf31-4fc5-8172-9cdcdeeaecbc")]
+[assembly: Guid("62eadf0a-f498-49af-bfbd-7b0f04c3be5c")]
 
 // Version information for an assembly consists of the following four values:
 //

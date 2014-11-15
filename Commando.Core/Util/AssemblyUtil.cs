@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using log4net;
@@ -13,16 +14,19 @@ namespace Commando.Core.Util
         public static IDictionary<string, Assembly> LoadAllKnownAssemblies() {
             IDictionary<string, Assembly> assemblies = new Dictionary<string, Assembly>();
 
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies().Where(assembly => assembly.IsKnownAssembly())) {
+            foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll", SearchOption.AllDirectories)) {
+                var assembly = Assembly.LoadFrom(file);
                 log.DebugFormat("Registering assembly: {0}", assembly.FullName);
-                assemblies.Add(assembly.FullName, assembly);
+                if (assembly.IsKnownAssembly()) {
+                    assemblies.Add(assembly.FullName, assembly);
+                }
             }
+
             return assemblies;
         }
 
         internal static bool IsKnownAssembly(this Assembly assembly) {
-            return true;
-            //return assembly.GetCustomAttributes(false).Cast<Attribute>().Any(attribute => attribute is AssemblyTrademarkAttribute && ((AssemblyTrademarkAttribute)attribute).Trademark == "OwnTradeMarkHere");
+            return assembly.GetCustomAttributes(false).Cast<Attribute>().Any(attribute => attribute is AssemblyTrademarkAttribute && ((AssemblyTrademarkAttribute) attribute).Trademark == "Commando");
         }
     }
 }
