@@ -1,4 +1,4 @@
-﻿namespace Commando.Test.HelloWorld
+﻿namespace Commando.Test.HelloWorld.Commands
 {
     public class HelloWorldCommandResult
     {

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Commando.Core;
 using Commando.Core.Util;
+using Commando.Test.HelloWorld.Commands;
 using log4net.Config;
 using NUnit.Framework;
 
@@ -17,7 +18,6 @@ namespace Commando.Test.HelloWorld.Test
 
             var builder = new ContainerBuilder();
             builder.RegisterBasicDispatcher();
-            builder.RegisterMessageHandlers(AssemblyUtil.LoadAllKnownAssemblies());
             container = builder.Build();
         }
 

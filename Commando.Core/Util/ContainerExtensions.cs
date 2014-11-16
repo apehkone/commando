@@ -13,6 +13,7 @@ namespace Commando.Core.Util
 
         public static void RegisterBasicDispatcher(this ContainerBuilder builder) {
             builder.RegisterType<CommandDispatcher>().As<ICommandDispatcher>();
+            builder.RegisterMessageHandlers(AssemblyUtil.LoadAllKnownAssemblies());
         }
 
         public static void RegisterMessageHandlers(this ContainerBuilder builder, IDictionary<string, Assembly> assemblies) {
@@ -22,7 +23,7 @@ namespace Commando.Core.Util
         }
 
         private static void RegisterType(this ContainerBuilder builder, Type type) {
-            Type[] interfaces = type.GetInterfaces();
+            var interfaces = type.GetInterfaces();
             log.DebugFormat("Registering command handler: {0} as {1}", type, interfaces[0]);
             RegistrationExtensions.RegisterType(builder, type).As(interfaces[0]);
         }

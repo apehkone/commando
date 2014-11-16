@@ -1,7 +1,8 @@
 ﻿namespace Commando.RabbitMQ
 {
-    public class RabbitMqConfig
+    public class RabbitMqConfig : IRabbitMqConfig
     {
-        public static string Host { get { return "localhost"; } }
+        public string Host { get { return "localhost"; } }
+        public string SubscriberId { get { return "test"; } }
     }
 }

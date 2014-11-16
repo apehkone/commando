@@ -2,6 +2,8 @@
 using Commando.Core;
 using Commando.Core.Util;
 using Commando.RabbitMQ;
+using Commando.Test.HelloWorld.Commands;
+using log4net;
 using log4net.Config;
 using NUnit.Framework;
 
@@ -11,27 +13,38 @@ namespace Commando.Test.HelloWorld.Test
     public class HelloWorldWithRabbitMqTest
     {
         private IComponentContext container;
+        bool messageReceived;
+        readonly ILog log = LogManager.GetLogger(typeof (HelloWorldWithRabbitMqTest));
 
         [SetUp]
         public void SetUp() {
             BasicConfigurator.Configure();
+
             var builder = new ContainerBuilder();
             builder.RegisterBasicDispatcher();
-            builder.RegisterMessageHandlers(AssemblyUtil.LoadAllKnownAssemblies());
-            builder.RegisterRabbitMq();
-            builder.RegisterType<RabbitMqReceiver>();
-            builder.RegisterInstance(new ReceiverConfig {RoutingKey = "hello"});
+            builder.RegisterType<RabbitMqConfig>().As<IRabbitMqConfig>();
             container = builder.Build();
         }
 
         [Test]
         public void ShouldExecuteHelloWorldCommand() {
-            var message = new RabbitMqMessage<HelloWorldCommand> {Payload = new HelloWorldCommand {Input = "Hola!"}, RoutingKey = "hello"};
-            var dispatcher = container.Resolve<ICommandDispatcher>();
-            dispatcher.SubmitRabbitMqCommand(message);
+            using (var receiver = new RabbitMqSubscriber<RabbitMqMessage<HelloWorldCommand>>(new RabbitMqConfig())) {
+                receiver.Subscribe(AssertReceivedMessage);
 
-            var receiver = container.Resolve<RabbitMqReceiver>();
-            Assert.AreEqual("Hola!", receiver.Receive<RabbitMqMessage<HelloWorldCommand>>().Payload.Input);
+                var message = new RabbitMqMessage<HelloWorldCommand> {Payload = new HelloWorldCommand {Input = "Hola!"}};
+                var dispatcher = container.Resolve<ICommandDispatcher>();
+                dispatcher.SubmitRabbitMqCommand(message);
+
+                while (!messageReceived) {
+                    log.Info("Waiting for a message receiver");
+                }
+            }
+        }
+
+        void AssertReceivedMessage(RabbitMqMessage<HelloWorldCommand> textMessage) {
+            log.InfoFormat("Received a message with payload: {0}", textMessage.Payload);
+            Assert.AreEqual("Hola!", textMessage.Payload.Input);
+            messageReceived = true;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Commando.Core;
 using Commando.Core.Attributes;
 
-namespace Commando.Test.HelloWorld
+namespace Commando.Test.HelloWorld.Commands
 {
     [CommandHandler]
     public class HelloWorldCommandHandler : ICommandHandler<HelloWorldCommand, HelloWorldCommandResult>

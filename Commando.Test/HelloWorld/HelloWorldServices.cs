@@ -1,5 +1,6 @@
 ﻿using Commando.Core;
 using Commando.RabbitMQ;
+using Commando.Test.HelloWorld.Commands;
 
 namespace Commando.Test.HelloWorld
 {
