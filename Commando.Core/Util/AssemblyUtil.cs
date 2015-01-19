@@ -11,13 +11,14 @@ namespace Commando.Core.Util
     {
         static readonly ILog log = LogManager.GetLogger(typeof (AssemblyUtil));
 
-        public static IDictionary<string, Assembly> LoadAllKnownAssemblies() {
+        public static IDictionary<string, Assembly> LoadAllKnownAssemblies(Func<Assembly, bool> isKnownAssembly) {
             IDictionary<string, Assembly> assemblies = new Dictionary<string, Assembly>();
 
-            foreach (var file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll", SearchOption.AllDirectories)) {
-                var assembly = Assembly.LoadFrom(file);
+            foreach (string file in Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll", SearchOption.AllDirectories)) {
+                Assembly assembly = Assembly.LoadFrom(file);
                 log.DebugFormat("Registering assembly: {0}", assembly.FullName);
-                if (assembly.IsKnownAssembly()) {
+                if (isKnownAssembly == null || isKnownAssembly(assembly)) {
+                    if(assemblies.ContainsKey(assembly.FullName)) continue;
                     assemblies.Add(assembly.FullName, assembly);
                 }
             }

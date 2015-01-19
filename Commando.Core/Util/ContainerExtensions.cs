@@ -11,9 +11,10 @@ namespace Commando.Core.Util
     {
         static readonly ILog log = LogManager.GetLogger(typeof (ContainerExtensions));
 
-        public static void RegisterBasicDispatcher(this ContainerBuilder builder) {
+        public static void RegisterBasicDispatcher(this ContainerBuilder builder, Func<Assembly, bool> isKnownAssembly = null)
+        {
             builder.RegisterType<CommandDispatcher>().As<ICommandDispatcher>();
-            builder.RegisterMessageHandlers(AssemblyUtil.LoadAllKnownAssemblies());
+            builder.RegisterMessageHandlers(AssemblyUtil.LoadAllKnownAssemblies(isKnownAssembly));
         }
 
         public static void RegisterMessageHandlers(this ContainerBuilder builder, IDictionary<string, Assembly> assemblies) {

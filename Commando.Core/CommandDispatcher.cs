@@ -25,8 +25,8 @@ namespace Commando.Core
             throw new CommandHandlerNotFoundException(typeof (TMessage));
         }
 
-        public Task<TResult> DispatchAsync<TMessage, TResult>(TMessage message) {
-            return Task.Run(() => Dispatch<TMessage, TResult>(message));
+        public async Task<TResult> DispatchAsync<TMessage, TResult>(TMessage message) {
+            return await Task.Run(() => Dispatch<TMessage, TResult>(message));
         }
     }
 }
