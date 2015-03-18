@@ -1,4 +1,7 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using Autofac;
 using Commando.Core;
 using Commando.Core.Util;
 using Commando.RabbitMQ;
@@ -21,7 +24,7 @@ namespace Commando.Test.HelloWorld.Test
             BasicConfigurator.Configure();
 
             var builder = new ContainerBuilder();
-            builder.RegisterBasicDispatcher();
+            builder.RegisterBasicDispatcher(assembly => assembly.GetCustomAttributes(false).Cast<Attribute>().Any(attribute => attribute is AssemblyTrademarkAttribute && ((AssemblyTrademarkAttribute)attribute).Trademark == "Commando"));
             builder.RegisterType<RabbitMqConfig>().As<IRabbitMqConfig>();
             container = builder.Build();
         }
